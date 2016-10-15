@@ -1,10 +1,27 @@
-#from scipy.spatial import distance as dist
+
+'''
+
+As of now I am comparing the corresponding frames of the 2 input videos.
+We are supposed to compare the corresponding cells of the same frame of 
+the 2 input videos. After the helper is done, We can change the code to
+taking cells into consideration. I checked by using identical videos.
+For correlation I get +1 as the result meaning that both are identical.
+Also I see that the euclidean and manhattan distances for the identical
+video is 0 
+
+'''
+
+
+
+
 import matplotlib.pyplot as plt
 import numpy as np
 import argparse
 import glob
 import cv2
 import scipy.spatial
+
+
 
 def compute_similarity_correlation(dir):
 	vids = glob.glob(dir + "/*.mp4")
@@ -20,8 +37,6 @@ def compute_similarity_correlation(dir):
 	while success1 == True and success2 == True:
 		success1,image1 = vidcap1.read()
 		success2,image2 = vidcap2.read()
-		#print 'Read a new frame: ', success
-		#cv2.imwrite("frame%d.jpg" % count, image)     # save frame as JPEG file
 		hist1 = cv2.calcHist([image1],[0],None,[256],[0,256])
 		hist2 = cv2.calcHist([image2],[0],None,[256],[0,256])
 		result = cv2.compareHist(hist1,hist2,cv2.cv.CV_COMP_CORREL)
@@ -44,8 +59,6 @@ def compute_similarity_chisquare(dir):
 	while success1 == True and success2 == True:
 		success1,image1 = vidcap1.read()
 		success2,image2 = vidcap2.read()
-		#print 'Read a new frame: ', success
-		#cv2.imwrite("frame%d.jpg" % count, image)     # save frame as JPEG file
 		hist1 = cv2.calcHist([image1],[0],None,[256],[0,256])
 		hist2 = cv2.calcHist([image2],[0],None,[256],[0,256])
 		result = cv2.compareHist(hist1,hist2,cv2.cv.CV_COMP_CHISQR)
@@ -69,8 +82,6 @@ def compute_similarity_intersect(dir):
 	while success1 == True and success2 == True:
 		success1,image1 = vidcap1.read()
 		success2,image2 = vidcap2.read()
-		#print 'Read a new frame: ', success
-		#cv2.imwrite("frame%d.jpg" % count, image)     # save frame as JPEG file
 		hist1 = cv2.calcHist([image1],[0],None,[256],[0,256])
 		hist2 = cv2.calcHist([image2],[0],None,[256],[0,256])
 		result = cv2.compareHist(hist1,hist2,cv2.cv.CV_COMP_INTERSECT)
@@ -93,8 +104,6 @@ def compute_similarity_bhattacharya(dir):
 	while success1 == True and success2 == True:
 		success1,image1 = vidcap1.read()
 		success2,image2 = vidcap2.read()
-		#print 'Read a new frame: ', success
-		#cv2.imwrite("frame%d.jpg" % count, image)     # save frame as JPEG file
 		hist1 = cv2.calcHist([image1],[0],None,[256],[0,256])
 		hist2 = cv2.calcHist([image2],[0],None,[256],[0,256])
 		result = cv2.compareHist(hist1,hist2,cv2.cv.CV_COMP_BHATTACHARYYA)
@@ -117,11 +126,8 @@ def compute_similarity_euclidean(dir):
 	while success1 == True and success2 == True:
 		success1,image1 = vidcap1.read()
 		success2,image2 = vidcap2.read()
-		#print 'Read a new frame: ', success
-		#cv2.imwrite("frame%d.jpg" % count, image)     # save frame as JPEG file
 		hist1 = cv2.calcHist([image1],[0],None,[256],[0,256])
 		hist2 = cv2.calcHist([image2],[0],None,[256],[0,256])
-		#result = cv2.compareHist(hist1,hist2,cv2.cv.CV_COMP_BHATTACHARYYA)
 		result = scipy.spatial.distance.euclidean(hist1,hist2)
 		sum += result
 		count += 1
@@ -143,11 +149,8 @@ def compute_similarity_manhattan(dir):
 	while success1 == True and success2 == True:
 		success1,image1 = vidcap1.read()
 		success2,image2 = vidcap2.read()
-		#print 'Read a new frame: ', success
-		#cv2.imwrite("frame%d.jpg" % count, image)     # save frame as JPEG file
 		hist1 = cv2.calcHist([image1],[0],None,[256],[0,256])
 		hist2 = cv2.calcHist([image2],[0],None,[256],[0,256])
-		#result = cv2.compareHist(hist1,hist2,cv2.cv.CV_COMP_BHATTACHARYYA)
 		result = scipy.spatial.distance.cityblock(hist1,hist2)
 		sum += result
 		count += 1
